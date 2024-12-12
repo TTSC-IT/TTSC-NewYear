@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TTSC New Year colorful party 2025</title>
+  <title>TTSC New Year colorful party 2025 (20/12/2024)</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     table { border-collapse: collapse; width: 100%; }
@@ -20,8 +20,30 @@
   <script>
     const apiUrl = "https://script.google.com/macros/s/AKfycbyzZP1l65uLxcmRZlRbobsDf0BkaX2dg6uahX5GTjFu460wa_2kvQsLaMqVhX46Xo_D/exec";
     
-    // เพิ่มฟังก์ชันเลือกคอลัมน์ที่ต้องการแสดง
-    const columnsToShow = [1, 3, 4, 5, 6, 7]; // แก้ไข index ของคอลัมน์ตามที่ต้องการ
+    // เพิ่มฟังก์ชันแปลงเวลา
+    function convertToThaiTime(isoString) {
+      // สร้าง Date object จาก ISO string
+      const date = new Date(isoString);
+      
+      // ปรับเวลาให้ตรงกับ timezone ประเทศไทย (เพิ่ม 7 ชั่วโมง)
+      const thaiTime = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+      
+      // จัดรูปแบบวันที่
+      const formatter = new Intl.DateTimeFormat('th-TH', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+      
+      return formatter.format(thaiTime);
+    }
+    
+    // เลือกคอลัมน์ที่ต้องการแสดง
+    const columnsToShow = [0, 1, 2, 3]; // แก้ไข index ของคอลัมน์ตามที่ต้องการ
     
     async function fetchData() {
       try {
@@ -56,7 +78,14 @@
         const rowElement = document.createElement("tr");
         columnsToShow.forEach(index => {
           const td = document.createElement("td");
-          td.textContent = row[index];
+          
+          // แปลงเวลาถ้าเป็นคอลัมน์เวลา (ในที่นี้สมมติว่าคอลัมน์ที่ 2 เป็นคอลัมน์เวลา)
+          if (index === 2) {
+            td.textContent = convertToThaiTime(row[index]);
+          } else {
+            td.textContent = row[index];
+          }
+          
           rowElement.appendChild(td);
         });
         tbody.appendChild(rowElement);
