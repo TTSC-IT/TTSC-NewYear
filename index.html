@@ -8,12 +8,10 @@
     th, td { border: 1px solid #ddd; text-align: left; padding: 8px; }
     th { background-color: #f4f4f4; }
     tr:nth-child(even) { background-color: #f9f9f9; }
-    input { margin: 10px; padding: 8px; width: calc(100% - 30px); }
   </style>
 </head>
 <body>
   <h1>Google Sheets Viewer</h1>
-  <input type="text" id="search" placeholder="Search...">
   <table id="dataTable">
     <thead>
       <tr id="tableHeader"></tr>
@@ -51,18 +49,6 @@
           tr.appendChild(td);
         });
         body.appendChild(tr);
-      });
-
-      // Add search functionality
-      const searchInput = document.getElementById('search');
-      searchInput.addEventListener('input', () => {
-        const filter = searchInput.value.toLowerCase();
-        const rows = body.getElementsByTagName('tr');
-        Array.from(rows).forEach(row => {
-          const cells = row.getElementsByTagName('td');
-          const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-          row.style.display = text.includes(filter) ? '' : 'none';
-        });
       });
     }
   </script>
