@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google Sheets Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; text-align: left; padding: 8px; }
+    th { background-color: #f4f4f4; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    input { margin: 10px; padding: 8px; width: calc(100% - 30px); }
+  </style>
+</head>
+<body>
+  <h1>Google Sheets Viewer</h1>
+  <input type="text" id="search" placeholder="Search...">
+  <table id="dataTable">
+    <thead>
+      <tr id="tableHeader"></tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      google.script.run.withSuccessHandler(loadData).getSheetData('Sheet1', ['Column1', 'Column2']);
+    });
+
+    function loadData(response) {
+      if (response.error) {
+        alert(response.error);
+        return;
+      }
+
+      const [headers, ...rows] = response.data;
+      const headerRow = document.getElementById('tableHeader');
+      const body = document.getElementById('tableBody');
+
+      // Render headers
+      headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+
+      // Render rows
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+          const td = document.createElement('td');
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+
+      // Add search functionality
+      const searchInput = document.getElementById('search');
+      searchInput.addEventListener('input', () => {
+        const filter = searchInput.value.toLowerCase();
+        const rows = body.getElementsByTagName('tr');
+        Array.from(rows).forEach(row => {
+          const cells = row.getElementsByTagName('td');
+          const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+          row.style.display = text.includes(filter) ? '' : 'none';
+        });
+      });
+    }
+  </script>
+</body>
+</html>
