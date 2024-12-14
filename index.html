@@ -5,14 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TTSC New Year colorful party 2025</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      position: relative; 
+    }
     table { border-collapse: collapse; width: 100%; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background-color: #f4f4f4; }
+    #registration-count {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <center><h1>ระบบตรวจสอบรายชื่อลงทะเบียนเข้าร่วมงาน TTSC New Year colorful party 2025 (20/12/2024) </h1></center>
+  
+  <!-- เพิ่ม div สำหรับแสดงจำนวนผู้ลงทะเบียน -->
+  <div id="registration-count"></div>
+  
   <table id="data-table">
     <thead></thead>
     <tbody></tbody>
@@ -37,6 +54,7 @@
       const table = document.getElementById("data-table");
       const thead = table.querySelector("thead");
       const tbody = table.querySelector("tbody");
+      const registrationCount = document.getElementById("registration-count");
       
       // ล้างข้อมูลก่อนเติมใหม่
       thead.innerHTML = "";
@@ -61,6 +79,10 @@
         });
         tbody.appendChild(rowElement);
       });
+
+      // นับจำนวน row และแสดงข้อความกำกับ
+      const rowCount = data.length - 1; // หัก header row ออก
+      registrationCount.textContent = `จำนวนผู้ลงทะเบียน: ${rowCount} คน`;
     }
     
     // ดึงข้อมูลใหม่ทุก 5 วินาที
